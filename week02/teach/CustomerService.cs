@@ -11,20 +11,31 @@ public class CustomerService {
         // Test Cases
 
         // Test 1
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: Two customer order, trying out the methods.
+        // Expected Result: Find out what it prints
         Console.WriteLine("Test 1");
-
-        // Defect(s) Found: 
+        var day1 = new CustomerService(4);
+        day1.AddNewCustomer();
+        day1.AddNewCustomer();
+        day1.ServeCustomer();
+        Console.WriteLine(day1);
+        // Defect(s) Found: No update is stated or process told, No idea what is happeing
 
         Console.WriteLine("=================");
 
         // Test 2
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: Try again but with lines that update the user
+        // Expected Result: See what is happening
         Console.WriteLine("Test 2");
+        var day2 = new CustomerService(4);
+        day1.AddNewCustomer();
+        day1.AddNewCustomer();
+        Console.WriteLine($"Service Queue: {day2}");
+        day1.ServeCustomer();
+        Console.WriteLine($"Service Queue: {day2}");
+        Console.WriteLine(day2);
 
-        // Defect(s) Found: 
+        // Defect(s) Found: works like a charm
 
         Console.WriteLine("=================");
 
