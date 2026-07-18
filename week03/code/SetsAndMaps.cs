@@ -22,7 +22,28 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        var seen = new HashSet<string>();
+        var pairs = new List<string>();
+
+        foreach (var word in words)
+        {
+            // "aa" cannot pair with a different word.
+            if (word[0] == word[1])
+            {
+                continue;
+            }
+
+            var reversed = $"{word[1]}{word[0]}";
+
+            if (seen.Contains(reversed))
+            {
+                pairs.Add($"{word} & {reversed}");
+            }
+
+            seen.Add(word);
+        }
+
+        return pairs.ToArray();
     }
 
     /// <summary>
@@ -43,6 +64,17 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3].Trim();
+
+                if (degrees.ContainsKey(degree))
+                {
+                    degrees[degree]++;
+                }
+                else
+                {
+                    degrees[degree] = 1;
+                }
+
         }
 
         return degrees;
@@ -66,8 +98,120 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var letterCounts = new Dictionary<char, int>();
+
+        int index1 = 0;
+        int index2 = 0;
+
+        while (index1 < word1.Length && index2 < word2.Length)
+        {
+            // Skip spaces in word1.
+            if (word1[index1] == ' ')
+            {
+                index1++;
+                continue;
+            }
+
+            // Skip spaces in word2.
+            if (word2[index2] == ' ')
+            {
+                index2++;
+                continue;
+            }
+
+            char letter1 = word1[index1];
+            char letter2 = word2[index2];
+
+            index1++;
+            index2++;
+
+            // Avoid dictionary operations when the characters already match.
+            if (letter1 == letter2)
+            {
+                continue;
+            }
+
+            letter1 = char.ToLowerInvariant(letter1);
+            letter2 = char.ToLowerInvariant(letter2);
+
+            // The characters may match after ignoring case.
+            if (letter1 == letter2)
+            {
+                continue;
+            }
+
+            if (letterCounts.TryGetValue(letter1, out int count1))
+            {
+                letterCounts[letter1] = count1 + 1;
+            }
+            else
+            {
+                letterCounts[letter1] = 1;
+            }
+
+            if (letterCounts.TryGetValue(letter2, out int count2))
+            {
+                letterCounts[letter2] = count2 - 1;
+            }
+            else
+            {
+                letterCounts[letter2] = -1;
+            }
+        }
+
+        // Process letters remaining in word1.
+        while (index1 < word1.Length)
+        {
+            char letter = word1[index1++];
+
+            if (letter == ' ')
+            {
+                continue;
+            }
+
+            letter = char.ToLowerInvariant(letter);
+
+            if (letterCounts.TryGetValue(letter, out int count))
+            {
+                letterCounts[letter] = count + 1;
+            }
+            else
+            {
+                letterCounts[letter] = 1;
+            }
+        }
+
+        // Process letters remaining in word2.
+        while (index2 < word2.Length)
+        {
+            char letter = word2[index2++];
+
+            if (letter == ' ')
+            {
+                continue;
+            }
+
+            letter = char.ToLowerInvariant(letter);
+
+            if (letterCounts.TryGetValue(letter, out int count))
+            {
+                letterCounts[letter] = count - 1;
+            }
+            else
+            {
+                letterCounts[letter] = -1;
+            }
+        }
+
+        foreach (int count in letterCounts.Values)
+        {
+            if (count != 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -101,6 +245,21 @@ public static class SetsAndMaps
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+        if (featureCollection == null)
+            {
+                return [];
+            }
+
+            var earthquakeSummaries = new List<string>();
+
+            foreach (var feature in featureCollection.Features)
+            {
+                var place = feature.Properties.Place;
+                var magnitude = feature.Properties.Mag;
+
+                earthquakeSummaries.Add($"{place} - Mag {magnitude}");
+            }
+
+            return earthquakeSummaries.ToArray();
     }
 }
